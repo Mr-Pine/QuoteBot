@@ -1,6 +1,7 @@
 import * as Discord from "discord.js"
 import { readFileSync } from "fs";
 import { setTimeout } from "timers";
+import { getRequirements, getQuotes } from "../getRequirements";
 
 export function list(message: Discord.Message, client: Discord.Client) {
     if (message.channel.id != "704275816598732840") {
@@ -10,36 +11,7 @@ export function list(message: Discord.Message, client: Discord.Client) {
 
     const allQuotes = JSON.parse(readFileSync("./src/quotes.json").toString())
 
-    var requirements: { excluded: string[], included: string[][] } = {
-        excluded: [],
-        included: []
-    }
-
-    var tagString = message.content.substring(message.content.indexOf("{") + 1, message.content.indexOf("}"))
-
-    var tagParts = tagString.split('|')
-    tagParts.forEach((part, index) => {
-        var tagArray = part.split(",")
-
-        var includedArray: string[] = []
-
-        tagArray.forEach((tag, index) => {
-            while (tag.startsWith(" ")) {
-                tag = tag.substring(1)
-            }
-            while (tag.endsWith(" ")) {
-                tag = tag.substring(0, tag.length - 1)
-            }
-            tagArray[index] = tag
-            if (tag.startsWith("!")) {
-                requirements.excluded.push(tag.substring(1))
-            } else {
-                includedArray.push(tag)
-            }
-        })
-
-        requirements.included.push(includedArray)
-    })
+    var requirements = getRequirements(message.content)
 
     console.log(requirements)
     var quoteSelection = getQuotes(requirements, allQuotes)
@@ -54,33 +26,6 @@ export function list(message: Discord.Message, client: Discord.Client) {
     }
 
 
-}
-
-function getQuotes(requirements: { excluded: string[], included: string[][] }, allQuotes: any[]) {
-    var listQuotes = allQuotes.filter(quote => {
-        if (quote.character != "none") {
-            quote.tags.push(quote.character.substring(0, quote.character.length - 1))
-        }
-        var meetsRequirements = false
-        //check if has all required tags [works]
-        requirements.included.forEach(part => {
-            var meetsPart = true
-
-            part.forEach(tag => {
-                meetsPart = (quote.tags as string[]).includes(tag) && meetsPart
-            })
-
-            meetsRequirements = meetsRequirements || meetsPart
-        })
-
-        //check if has any of exluded tags [works]
-        requirements.excluded.forEach(exclude => {
-            meetsRequirements = !(quote.tags as string[]).includes(exclude) && meetsRequirements
-        })
-        return meetsRequirements
-    })
-
-    return listQuotes
 }
 
 function sendNext(allQuotes: any[], index: number, message: Discord.Message) {

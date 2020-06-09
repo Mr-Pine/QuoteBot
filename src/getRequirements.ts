@@ -33,3 +33,31 @@ export function getRequirements(messageContent: string){
 
     return requirements
 }
+
+export function getQuotes(requirements: { excluded: string[], included: string[][] }, allQuotes: any[]) {
+    var listQuotes = allQuotes.filter(quote => {
+        var tags = [...quote.tags]
+        if (quote.character != "none") {
+            tags.push(quote.character.substring(0, quote.character.length - 1))
+        }
+        var meetsRequirements = false
+        //check if has all required tags [works]
+        requirements.included.forEach(part => {
+            var meetsPart = true
+
+            part.forEach(tag => {
+                meetsPart = (tags as string[]).includes(tag) && meetsPart
+            })
+
+            meetsRequirements = meetsRequirements || meetsPart
+        })
+
+        //check if has any of exluded tags [works]
+        requirements.excluded.forEach(exclude => {
+            meetsRequirements = !(tags as string[]).includes(exclude) && meetsRequirements
+        })
+        return meetsRequirements
+    })
+
+    return listQuotes
+}

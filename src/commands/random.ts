@@ -57,7 +57,7 @@ function sendRandom(messages: Discord.Message[], original: Discord.Message) {
 
 function getStats(messages: Discord.Message[], original: Discord.Message) {
     var stats: any = {
-        "total": messages.length,
+        total: messages.length,
         users: {
 
         }
