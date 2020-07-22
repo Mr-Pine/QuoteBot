@@ -23,7 +23,7 @@ export function generateQuote(quoteObject: {
     template = template.replace("{text}", quoteObject.text)
     template = template.replace("{author}", quoteObject.author)
     template = template.replace("{authorTag}", quoteObject.character)
-    template = template.replace("{tags}", quoteObject.tags.join())
+    template = template.replace("{tags}", quoteObject.tags.join(", "))
     template = template.replace("{number}", quoteNumber.toString())
 
     if(quoteObject.reporter){
