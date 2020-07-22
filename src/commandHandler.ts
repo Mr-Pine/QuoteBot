@@ -33,10 +33,6 @@ export function handle(message: Discord.Message, currentInvoker: string, client:
 }
 
 function getPermission(message: Discord.Message, permissions: string[]) {
-    if (message.author.id === config.OWNER) {
-        return true
-    }
-
 
     if (permissions.indexOf("everyone") > -1) {
         return true

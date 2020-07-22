@@ -1,8 +1,17 @@
-export function getRequirements(messageContent: string){
+export function getRequirements(messageContent: string) {
 
-    var requirements: { excluded: string[], included: string[][] } = {
+    var requirements: { excluded: string[], included: string[][], authors: string[] } = {
         excluded: [],
-        included: []
+        included: [],
+        authors: []
+    }
+
+    if (messageContent.indexOf("{") == -1 || messageContent.indexOf("}") == -1) {
+        return {
+            excluded: ["all"],
+            included: [],
+            authors: []
+        }
     }
 
     var tagString = messageContent.substring(messageContent.indexOf("{") + 1, messageContent.indexOf("}"))
@@ -23,6 +32,12 @@ export function getRequirements(messageContent: string){
             tagArray[index] = tag
             if (tag.startsWith("!")) {
                 requirements.excluded.push(tag.substring(1))
+            } else if (tag.startsWith("?")) {
+                while (tag.startsWith(" ")) {
+                    tag = tag.substring(1)
+                }
+                requirements.authors.push(tag.substring(5, tag.length - 1))
+                console.log(requirements.authors)
             } else {
                 includedArray.push(tag)
             }
@@ -31,10 +46,16 @@ export function getRequirements(messageContent: string){
         requirements.included.push(includedArray)
     })
 
+    console.log(requirements)
     return requirements
 }
 
-export function getQuotes(requirements: { excluded: string[], included: string[][] }, allQuotes: any[]) {
+export function getQuotes(requirements: { excluded: string[], included: string[][], authors: string[] }, allQuotes: any[]) {
+    if(requirements.excluded[0] == "all") {
+        return allQuotes
+    }
+
+
     var listQuotes = allQuotes.filter(quote => {
         var tags = [...quote.tags]
         if (quote.character != "none") {
@@ -49,6 +70,10 @@ export function getQuotes(requirements: { excluded: string[], included: string[]
                 meetsPart = (tags as string[]).includes(tag) && meetsPart
             })
 
+            if(part.length == 0){
+                meetsPart = false
+            }
+
             meetsRequirements = meetsRequirements || meetsPart
         })
 
@@ -56,6 +81,8 @@ export function getQuotes(requirements: { excluded: string[], included: string[]
         requirements.excluded.forEach(exclude => {
             meetsRequirements = !(tags as string[]).includes(exclude) && meetsRequirements
         })
+
+        meetsRequirements = requirements.authors.includes(quote.reporter) || meetsRequirements
         return meetsRequirements
     })
 

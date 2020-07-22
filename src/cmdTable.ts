@@ -2,6 +2,7 @@ import {getRandom} from "./commands/random"
 import { newQuote } from "./commands/new"
 import { list } from "./commands/list"
 import { stats } from "./commands/stats"
+import { setTemplate } from "./commands/template"
 
 export const commands = [
     {
@@ -42,5 +43,15 @@ export const commands = [
             "everyone"
         ],
         function: stats
+    },
+    {
+        invokers: [
+            "template",
+            "setTemplate"
+        ], 
+        permission: [
+            "735448946654183464"
+        ],
+        function: setTemplate
     }
 ]

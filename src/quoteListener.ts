@@ -26,7 +26,7 @@ export function listenQuotes(message: Discord.Message) {
             return
         }
 
-        message.channel.send(`${parts[0]}\n     -${parts[1]}`).then(quoteMessage => {
+        message.channel.send(`${parts[0]}\n     -${parts[1]}\n\n`).then(quoteMessage => {
             var quoteObject = {
                 text: parts[0],
                 author: parts[1],
