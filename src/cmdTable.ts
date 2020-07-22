@@ -3,6 +3,7 @@ import { newQuote } from "./commands/new"
 import { list } from "./commands/list"
 import { stats } from "./commands/stats"
 import { setTemplate } from "./commands/template"
+import { update } from "./commands/update"
 
 export const commands = [
     {
@@ -53,5 +54,14 @@ export const commands = [
             "735448946654183464"
         ],
         function: setTemplate
+    },
+    {
+        invokers: [
+            "update"
+        ], 
+        permission: [
+            "735448946654183464"
+        ],
+        function: update
     }
 ]
