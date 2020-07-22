@@ -1,5 +1,1 @@
-{
-    "492426074396033035": {
-        "template": "Quote #{number} eingereicht von {reporter}:\n\n{text}\n     -{author}\n\nInvolvierte Person: {authorTag}\nTags: {tags}\n\n]<<template [Quote #{number} eingereicht von {reporter}:\n\n{text}\n     -{author}\n\nInvolvierte Person: {authorTag}\nTags: {tags}\n\n"
-    }
-}
+{"492426074396033035":{"template":"Quote #{number} eingereicht von {reporter}:\n\n{text}\n     -{author}\n\nInvolvierte Person: {authorTag}\nTags: {tags}\n\n"}}

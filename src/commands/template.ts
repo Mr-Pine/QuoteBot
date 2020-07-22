@@ -14,7 +14,6 @@ export function setTemplate(message: Discord.Message) {
     }
 
     template = template.substring(startIndex + 1, endIndex)
-    console.log(template)
 
     //save in settings
     var settings = JSON.parse(readFileSync("./src/settings.json").toString())
