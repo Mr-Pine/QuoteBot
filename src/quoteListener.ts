@@ -1,5 +1,4 @@
 import * as Discord from "discord.js"
-import * as config from "./config.json"
 import { readFileSync, writeFileSync } from "fs"
 import { settings } from "cluster"
 import { generateQuote } from "./generateQuote"
@@ -8,7 +7,9 @@ export function listenQuotes(message: Discord.Message) {
     var quoteString = readFileSync("./src/quotes.json").toString()
     var quotes = JSON.parse(quoteString)
 
-    if (message.channel.id == config.QUOTE_CHANNEL_ID && message.content.startsWith("Text:")) {
+    var settings = JSON.parse(readFileSync("./src/settings.json").toString())
+
+    if (message.channel.id == settings[message.guild?.id as string].QUOTE_CHANNEL_ID && message.content.startsWith("Text:")) {
         console.log("QUOTE!")
         var parts = message.content.split("\n\n\n")
         parts.forEach((part, index) => {

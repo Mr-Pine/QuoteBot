@@ -1,10 +1,12 @@
 import * as Discord from "discord.js"
 import { readFileSync, writeFileSync } from "fs"
-import * as config from "../config.json"
 import { generateQuote } from "../generateQuote"
 import { setTimeout } from "timers"
+import { settings } from "cluster"
 
 export async function update(message: Discord.Message, client: Discord.Client) {
+
+    var settings = JSON.parse(readFileSync("./src/settings.json").toString())
 
     var quotes = JSON.parse(readFileSync("./src/quotes.json").toString()) as {
         text: string;
@@ -18,7 +20,7 @@ export async function update(message: Discord.Message, client: Discord.Client) {
     for (let i = 0; i < quotes.length; i++) {
         //let i = quotes.length - 1
 
-        let quoteChannel = await client.channels.fetch(config.QUOTE_CHANNEL_ID) as Discord.TextChannel
+        let quoteChannel = await client.channels.fetch(settings[message.guild?.id as string].QUOTE_CHANNEL_ID) as Discord.TextChannel
 
         try {
             var messageID = quotes[i].message

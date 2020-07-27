@@ -1,1 +1,7 @@
-{"492426074396033035":{"template":"Quote #{number} eingereicht von {reporter}:\n\n{text}\n     -{author}\n\nInvolvierte Person: {authorTag}\nTags: {tags}\n\n---------------------------------------------------------------------------------------------------", "quoteMaster": "735448946654183464"}}
+{
+    "492426074396033035": {
+        "template": "Quote #{number} eingereicht von {reporter}:\n\n{text}\n     -{author}\n\nInvolvierte Person: {authorTag}\nTags: {tags}\n\n---------------------------------------------------------------------------------------------------",
+        "quoteMaster": "735448946654183464",
+        "QUOTE_CHANNEL_ID": "715604614577258567"
+    }
+}

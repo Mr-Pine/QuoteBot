@@ -5,6 +5,7 @@ import { stats } from "./commands/stats"
 import { setTemplate } from "./commands/template"
 import { update } from "./commands/update"
 import { edit } from "./commands/edit"
+import { init } from "./commands/init"
 
 export const commands = [
     {
@@ -73,5 +74,16 @@ export const commands = [
             "everyone"
         ],
         function: edit
+    },
+    {
+        invokers: [
+            "init",
+            "initialize",
+            "initialise"
+        ],
+        permission: [
+            "everyone"
+        ],
+        function: init
     }
 ]

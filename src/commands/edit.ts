@@ -1,7 +1,6 @@
 import * as Discord from "discord.js"
 import { readFileSync, writeFileSync } from "fs"
 import { generateQuote } from "../generateQuote"
-import * as config from "../config.json"
 
 export async function edit(message: Discord.Message, client: Discord.Client) {
     var content = message.content
@@ -10,6 +9,8 @@ export async function edit(message: Discord.Message, client: Discord.Client) {
     var quoteContent = argString.trim().slice(argString.indexOf(" ") + 1).trim()
 
     console.log(`#${number}: ${quoteContent}`)
+
+    var settings = JSON.parse(readFileSync("./src/settings.json").toString())
 
     var quotes = JSON.parse(readFileSync("./src/quotes.json").toString()) as {
         text: string;
@@ -60,7 +61,7 @@ export async function edit(message: Discord.Message, client: Discord.Client) {
 
     writeFileSync("./src/quotes.json", JSON.stringify(quotes))
 
-    let quoteChannel = await client.channels.fetch(config.QUOTE_CHANNEL_ID) as Discord.TextChannel
+    let quoteChannel = await client.channels.fetch(settings[message.guild?.id as string].QUOTE_CHANNEL_ID) as Discord.TextChannel
 
     var messageID = quotes[parseInt(number) - 1].message
     var quoteMessage = await quoteChannel.messages.fetch(messageID)
