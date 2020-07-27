@@ -53,7 +53,7 @@ export const commands = [
             "setTemplate"
         ], 
         permission: [
-            "735448946654183464"
+            "everyone"
         ],
         function: setTemplate
     },
@@ -62,7 +62,7 @@ export const commands = [
             "update"
         ], 
         permission: [
-            "735448946654183464"
+            "everyone"
         ],
         function: update
     },

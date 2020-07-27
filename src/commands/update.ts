@@ -5,38 +5,46 @@ import { setTimeout } from "timers"
 import { settings } from "cluster"
 
 export async function update(message: Discord.Message, client: Discord.Client) {
-
+    
     var settings = JSON.parse(readFileSync("./src/settings.json").toString())
 
-    var quotes = JSON.parse(readFileSync("./src/quotes.json").toString()) as {
-        text: string;
-        author: string;
-        reporter: string | undefined;
-        character: string;
-        tags: string[];
-        message: string
-    }[]
+    if (message.member?.roles.cache.has(settings[message.guild?.id as string]["quoteMaster"])) {
 
-    for (let i = 0; i < quotes.length; i++) {
-        //let i = quotes.length - 1
+        var settings = JSON.parse(readFileSync("./src/settings.json").toString())
 
-        let quoteChannel = await client.channels.fetch(settings[message.guild?.id as string].QUOTE_CHANNEL_ID) as Discord.TextChannel
+        var quotes = JSON.parse(readFileSync("./src/quotes.json").toString()) as {
+            text: string;
+            author: string;
+            reporter: string | undefined;
+            character: string;
+            tags: string[];
+            message: string
+        }[]
 
-        try {
-            var messageID = quotes[i].message
-            var quoteMessage = await quoteChannel.messages.fetch(messageID)
-            quoteMessage.delete()
-        } catch (error) {
+        for (let i = 0; i < quotes.length; i++) {
+            //let i = quotes.length - 1
+
+            let quoteChannel = await client.channels.fetch(settings[message.guild?.id as string]["QUOTE_CHANNEL_ID"]) as Discord.TextChannel
+
+            try {
+                var messageID = quotes[i].message
+                var quoteMessage = await quoteChannel.messages.fetch(messageID)
+                quoteMessage.delete()
+            } catch (error) {
+
+            }
+
+            var newContent = generateQuote(quotes[i], i + 1, message)
+            var newMessage = await quoteChannel.send(newContent)
+            quotes[i].message = newMessage.id
+
+            setTimeout(() => { }, 10)
 
         }
 
-        var newContent = generateQuote(quotes[i], i + 1, message)
-        var newMessage = await quoteChannel.send(newContent)
-        quotes[i].message = newMessage.id
+        writeFileSync("./src/quotes.json", JSON.stringify(quotes))
 
-        setTimeout(() => { }, 10)
-
+    } else {
+        message.channel.send("You need QuoteMaster Permission for this operation. See `<<help` for details")
     }
-
-    writeFileSync("./src/quotes.json", JSON.stringify(quotes))
 }

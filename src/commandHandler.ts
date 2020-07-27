@@ -20,7 +20,7 @@ export function handle(message: Discord.Message, currentInvoker: string, client:
                 command.function(message, client)
                 correctCommand = true
             } else {
-                message.channel.send("You don't have Permission for this operation. See `>>help` for details")
+                message.channel.send("You don't have Permission for this operation. See `<<help` for details")
                 help = false
             }
         }

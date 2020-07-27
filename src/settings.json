@@ -3,5 +3,10 @@
         "template": "Quote #{number} eingereicht von {reporter}:\n\n{text}\n     -{author}\n\nInvolvierte Person: {authorTag}\nTags: {tags}\n\n---------------------------------------------------------------------------------------------------",
         "quoteMaster": "735448946654183464",
         "QUOTE_CHANNEL_ID": "715604614577258567"
+    },
+    "675394595324035072": {
+        "quoteMaster": "737330700885164124",
+        "QUOTE_CHANNEL_ID": "737329948640936028",
+        "template": "Quote #{number} eingereicht von {reporter}:\n\n{text}\n     -{author}\n\nInvolvierte Person: {authorTag}\nTags: {tags}\n\n---------------------------------------------------------------------------------------------------"
     }
 }
