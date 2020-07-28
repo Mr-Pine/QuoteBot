@@ -3,7 +3,7 @@ import { getRequirements, getQuotes } from "../getRequirements"
 import { readFileSync } from "fs"
 
 export function stats(message: Discord.Message, client: Discord.Client) {
-    const allQuotes = JSON.parse(readFileSync("./src/quotes.json").toString())
+    const allQuotes = JSON.parse(readFileSync("./src/quotes.json").toString())[message.guild?.id as string]
 
     var quotes = getQuotes(getRequirements(message.content), allQuotes)
 

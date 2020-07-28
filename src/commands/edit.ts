@@ -12,7 +12,8 @@ export async function edit(message: Discord.Message, client: Discord.Client) {
 
     var settings = JSON.parse(readFileSync("./src/settings.json").toString())
 
-    var quotes = JSON.parse(readFileSync("./src/quotes.json").toString()) as {
+    var allQuotes = JSON.parse(readFileSync("./src/quotes.json").toString())
+    var quotes = allQuotes[message.guild?.id as string] as {
         text: string;
         author: string;
         reporter: string | undefined;
@@ -59,7 +60,9 @@ export async function edit(message: Discord.Message, client: Discord.Client) {
 
     quotes[parseInt(number) - 1] = quoteObject
 
-    writeFileSync("./src/quotes.json", JSON.stringify(quotes))
+    allQuotes[message.guild?.id as string] = quotes
+
+    writeFileSync("./src/quotes.json", JSON.stringify(allQuotes))
 
     let quoteChannel = await client.channels.fetch(settings[message.guild?.id as string].QUOTE_CHANNEL_ID) as Discord.TextChannel
 

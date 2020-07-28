@@ -5,14 +5,15 @@ import { setTimeout } from "timers"
 import { settings } from "cluster"
 
 export async function update(message: Discord.Message, client: Discord.Client) {
-    
+
     var settings = JSON.parse(readFileSync("./src/settings.json").toString())
 
     if (message.member?.roles.cache.has(settings[message.guild?.id as string]["quoteMaster"])) {
 
         var settings = JSON.parse(readFileSync("./src/settings.json").toString())
 
-        var quotes = JSON.parse(readFileSync("./src/quotes.json").toString()) as {
+        var allQuotes = JSON.parse(readFileSync("./src/quotes.json").toString())
+        var quotes = allQuotes[message.guild?.id as string] as {
             text: string;
             author: string;
             reporter: string | undefined;
@@ -42,7 +43,9 @@ export async function update(message: Discord.Message, client: Discord.Client) {
 
         }
 
-        writeFileSync("./src/quotes.json", JSON.stringify(quotes))
+        allQuotes[message.guild?.id as string] = quotes
+
+        writeFileSync("./src/quotes.json", JSON.stringify(allQuotes))
 
     } else {
         message.channel.send("You need QuoteMaster Permission for this operation. See `<<help` for details")

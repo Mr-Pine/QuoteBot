@@ -9,7 +9,7 @@ export function list(message: Discord.Message, client: Discord.Client) {
         return;
     }
 
-    const allQuotes = JSON.parse(readFileSync("./src/quotes.json").toString())
+    const allQuotes = JSON.parse(readFileSync("./src/quotes.json").toString())[message.guild?.id as string]
 
     var requirements = getRequirements(message.content)
 

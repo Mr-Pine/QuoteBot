@@ -4,14 +4,12 @@ import { settings } from "cluster"
 import { generateQuote } from "./generateQuote"
 
 export function listenQuotes(message: Discord.Message) {
-    var quoteString = readFileSync("./src/quotes.json").toString()
-    var quotes = JSON.parse(quoteString)
 
     var settings = JSON.parse(readFileSync("./src/settings.json").toString())
 
     var quoteChannels: string[] = []
 
-    for(var guildID in settings){
+    for (var guildID in settings) {
         quoteChannels.push(settings[guildID]["QUOTE_CHANNEL_ID"])
     }
 
@@ -44,18 +42,34 @@ export function listenQuotes(message: Discord.Message) {
                 tags: separateTags(parts[3])
             }
 
-            message.channel.send(generateQuote(quoteObject, (quotes as Object[]).length + 1, message)).then(quoteMessage => {
+            var allQuotes = JSON.parse(readFileSync("./src/quotes.json").toString())
+            var quotes = allQuotes[message.guild?.id as string] as {
+                text: string;
+                author: string;
+                reporter: string | undefined;
+                character: string;
+                tags: string[];
+                message: string
+            }[]
+
+            if(!quotes){
+                quotes = []
+            }
+
+            message.channel.send(generateQuote(quoteObject, (quotes).length + 1, message)).then(quoteMessage => {
                 var storeQuote = quoteObject as any
                 storeQuote.message = quoteMessage.id
 
-                var arrayQuotes = quotes as Object[]
-                arrayQuotes.push(storeQuote)
-                quotes = arrayQuotes
+                quotes.push(storeQuote)
+                quotes = quotes
 
-                console.log(arrayQuotes.length)
+                console.log(quotes.length)
 
 
-                writeFileSync("./src/quotes.json", JSON.stringify(quotes))
+
+                allQuotes[message.guild?.id as string] = quotes
+
+                writeFileSync("./src/quotes.json", JSON.stringify(allQuotes))
 
                 message.delete()
             })
