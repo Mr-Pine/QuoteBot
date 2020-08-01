@@ -52,7 +52,7 @@ export function listenQuotes(message: Discord.Message) {
                 message: string
             }[]
 
-            if(!quotes){
+            if (!quotes) {
                 quotes = []
             }
 
