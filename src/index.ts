@@ -4,6 +4,7 @@ import { handle } from "./commandHandler"
 import { sendEmbed } from "./sendEmbed"
 import { setStatus } from "./status"
 import { listenQuotes } from "./quoteListener"
+import { listenServer } from "./serverQuoteListener"
 
 console.log("Hello World");
 
@@ -51,3 +52,5 @@ process.on("SIGINT", (signal) => {
         process.exit(0)
     })
 })
+
+listenServer()
