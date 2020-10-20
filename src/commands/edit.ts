@@ -69,6 +69,8 @@ export async function edit(message: Discord.Message, client: Discord.Client) {
     var messageID = quotes[parseInt(number) - 1].message
     var quoteMessage = await quoteChannel.messages.fetch(messageID)
     quoteMessage.edit(generateQuote(quoteObject, parseInt(number), message))
+
+    message.delete();
 }
 
 function separateTags(tags: string) {
