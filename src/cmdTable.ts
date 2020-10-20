@@ -6,6 +6,7 @@ import { setTemplate } from "./commands/template"
 import { update } from "./commands/update"
 import { edit } from "./commands/edit"
 import { init } from "./commands/init"
+import { remove } from "./commands/remove"
 
 export const commands = [
     {
@@ -85,5 +86,15 @@ export const commands = [
             "everyone"
         ],
         function: init
+    },
+    {
+        invokers: [
+            "delete",
+            "remove"
+        ],
+        permission: [
+            "everyone"
+        ],
+        function: remove
     }
 ]
