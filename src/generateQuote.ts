@@ -7,11 +7,9 @@ export function generateQuote(quoteObject: {
     reporter: string | undefined;
     character: string;
     tags: string[];
-    message?: string;
-}, quoteNumber: number, message: Discord.Message) {
+}, quoteNumber: number, serverID: string) {
     var settings = JSON.parse(readFileSync("./src/settings.json").toString())
 
-    var serverID = message.guild?.id as string
     if (settings[serverID] == null) {
         return `${quoteObject.text}\n     -${quoteObject.author}\n\n`
     }

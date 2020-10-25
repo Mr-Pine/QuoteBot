@@ -16,69 +16,74 @@ export function listenQuotes(message: Discord.Message) {
     try {
         if (quoteChannels.includes(message.channel.id) && message.content.startsWith("Text:")) {
             console.log("QUOTE!")
-            var parts = message.content.split("\n\n\n")
-            parts.forEach((part, index) => {
-                var newPart = part.split(":").slice(1).join(':')
-                while (newPart[0] == " ") {
-                    newPart = newPart.slice(1)
-                }
-                parts[index] = newPart
-            })
 
-            if (parts.includes("[replace this]") || parts.includes("[replace with tag. If not on Server: none]") || parts.includes("[replace with fitting tags, separated by ',']")) {
-                message.channel.send("Please replace all fields")
-                return
-            }
-            if (parts.length != 4) {
-                message.channel.send("Please use propper formatting")
-                return
-            }
+            createQuote(message.channel as Discord.TextChannel, message.content, message.author.id, message.guild)
 
-            var quoteObject = {
-                text: parts[0],
-                author: parts[1],
-                reporter: message.member?.id,
-                character: parts[2],
-                tags: separateTags(parts[3])
-            }
-
-            var allQuotes = JSON.parse(readFileSync("./src/quotes.json").toString())
-            var quotes = allQuotes[message.guild?.id as string] as {
-                text: string;
-                author: string;
-                reporter: string | undefined;
-                character: string;
-                tags: string[];
-                message: string
-            }[]
-
-            if(!quotes){
-                quotes = []
-            }
-
-            message.channel.send(generateQuote(quoteObject, (quotes).length + 1, message)).then(quoteMessage => {
-                var storeQuote = quoteObject as any
-                storeQuote.message = quoteMessage.id
-
-                quotes.push(storeQuote)
-                quotes = quotes
-
-                console.log(quotes.length)
-
-
-
-                allQuotes[message.guild?.id as string] = quotes
-
-                writeFileSync("./src/quotes.json", JSON.stringify(allQuotes))
-
-                message.delete()
-            })
-
-
+            message.delete()
         }
     } catch (error) {
 
     }
+}
+
+export function createQuote(channel: Discord.TextChannel, quoteBuilderText: string, reporter: any, server: any){
+    
+    var parts = quoteBuilderText.split("\n\n\n")
+    parts.forEach((part, index) => {
+        var newPart = part.split(":").slice(1).join(':')
+        while (newPart[0] == " ") {
+            newPart = newPart.slice(1)
+        }
+        parts[index] = newPart
+    })
+
+    if (parts.includes("[replace this]") || parts.includes("[replace with tag. If not on Server: none]") || parts.includes("[replace with fitting tags, separated by ',']")) {
+        channel.send("Please replace all fields")
+        return
+    }
+    if (parts.length != 4) {
+        channel.send("Please use propper formatting")
+        return
+    }
+
+    var quoteObject = {
+        text: parts[0],
+        author: parts[1],
+        reporter: reporter,
+        character: parts[2],
+        tags: separateTags(parts[3])
+    }
+
+    var allQuotes = JSON.parse(readFileSync("./src/quotes.json").toString())
+    var quotes = allQuotes[server] as {
+        text: string;
+        author: string;
+        reporter: string | undefined;
+        character: string;
+        tags: string[];
+        message: string
+    }[]
+
+    if(!quotes){
+        quotes = []
+    }
+
+    channel.send(generateQuote(quoteObject, (quotes).length + 1, server)).then(quoteMessage => {
+        var storeQuote = quoteObject as any
+        storeQuote.message = quoteMessage.id
+
+        quotes.push(storeQuote)
+        quotes = quotes
+
+        console.log(quotes.length)
+
+
+
+        allQuotes[server] = quotes
+
+        writeFileSync("./src/quotes.json", JSON.stringify(allQuotes))
+
+    })
 }
 
 function separateTags(tags: string) {
