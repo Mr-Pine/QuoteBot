@@ -4,6 +4,7 @@ import { handle } from "./commandHandler"
 import { sendEmbed } from "./sendEmbed"
 import { setStatus } from "./status"
 import { listenQuotes } from "./quoteListener"
+import { listenServer } from "./serverQuoteListener"
 
 console.log("Hello World");
 
@@ -13,6 +14,7 @@ process.stdin.resume();
 client.on("ready", () => {
     console.log("Allzeit bereit für deepe Quotes");
     client.user?.setActivity("Hallo! Bin wieder da", { type: "STREAMING" })
+    listenServer(client)
 })
 
 client.on("message", message => {
