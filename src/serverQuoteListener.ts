@@ -11,7 +11,9 @@ export function listenServer(client: Discord.Client) {
 
         switch (request.url) {
             case '/server-list': {
-                response.writeHead(200, { 'Content-Type': 'application/json' })
+                response.setHeader('Content-Type', 'text/plain')
+                response.setHeader("Access-Control-Allow-Origin", "*");
+                //response.statusCode = 200
                 response.end(JSON.stringify({servers: Object.keys(settings)}))
             }
             case '/': {
