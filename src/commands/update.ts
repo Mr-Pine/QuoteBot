@@ -35,7 +35,7 @@ export async function update(message: Discord.Message, client: Discord.Client) {
 
             }
 
-            var newContent = generateQuote(quotes[i], i + 1, message)
+            var newContent = generateQuote(quotes[i], i + 1, message.guild?.id as string)
             var newMessage = await quoteChannel.send(newContent)
             quotes[i].message = newMessage.id
 

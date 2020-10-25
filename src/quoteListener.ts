@@ -17,7 +17,7 @@ export function listenQuotes(message: Discord.Message) {
         if (quoteChannels.includes(message.channel.id) && message.content.startsWith("Text:")) {
             console.log("QUOTE!")
 
-            createQuote(message.channel as Discord.TextChannel, message.content, message.author.id, message.guild)
+            createQuote(message.channel as Discord.TextChannel, message.content, message.author.id, message.guild?.id as string)
 
             message.delete()
         }
