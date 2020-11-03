@@ -7,6 +7,7 @@ import { update } from "./commands/update"
 import { edit } from "./commands/edit"
 import { init } from "./commands/init"
 import { remove } from "./commands/remove"
+import { getTag } from "./commands/getTag"
 
 export const commands = [
     {
@@ -96,5 +97,15 @@ export const commands = [
             "everyone"
         ],
         function: remove
+    },
+    {
+        invokers: [
+            "getTag",
+            "tag"
+        ],
+        permission: [
+            "everyone"
+        ],
+        function: getTag
     }
 ]

@@ -2,6 +2,7 @@ import * as http from "http"
 import { createQuote } from "./quoteListener"
 import { readFileSync } from "fs"
 import * as Discord from "discord.js"
+import { removeQuote } from './commands/remove'
 
 export function listenServer(client: Discord.Client) {
 
@@ -15,6 +16,7 @@ export function listenServer(client: Discord.Client) {
                 response.setHeader("Access-Control-Allow-Origin", "*");
                 //response.statusCode = 200
                 response.end(JSON.stringify({servers: Object.keys(settings)}))
+                break;
             }
             case '/': {
                 var body = ''
@@ -39,6 +41,35 @@ export function listenServer(client: Discord.Client) {
                     })
 
                 })
+
+                return
+            }
+            case '/delete': {
+                console.log("delete")
+
+                var body = ''
+                request.on('data', function (data) {
+                    body += data
+                })
+                request.on('end', function () {
+                    body = decodeURIComponent(body)
+                    body = body.split("%20").join(" ")
+                    var bodyJSON = getBodyJSON(body)
+                    response.writeHead(200, { 'Content-Type': 'text/plain' })
+                    response.end('post received')
+
+                    console.log(bodyJSON)
+
+                    var member = client.guilds.cache.get(bodyJSON['server'])?.members.cache.get(bodyJSON['user'])
+                    console.log(member)
+
+                    removeQuote(bodyJSON['number'], bodyJSON['server'], client, member as Discord.GuildMember)
+                })
+                return
+            }
+            case '/edit': {
+                console.log("edit")
+                return
             }
         }
 
