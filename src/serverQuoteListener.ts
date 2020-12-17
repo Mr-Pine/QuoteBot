@@ -76,7 +76,7 @@ export function listenServer(client: Discord.Client) {
     })
 
     const port = 3000
-    const host = 'localhost'//'192.168.178.52'
+    const host = /*'localhost'*/'192.168.178.52'
     server.listen(port, host)
     console.log(`Listening at http://${host}:${port}`)
 
