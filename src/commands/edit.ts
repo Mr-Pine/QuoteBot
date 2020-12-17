@@ -10,10 +10,21 @@ export async function edit(message: Discord.Message, client: Discord.Client) {
 
     console.log(`#${number}: ${quoteContent}`)
 
+    editQuote(number, quoteContent, message.guild?.id as string, client, message.member as Discord.GuildMember, message)
+
+    editQuote
+
+    message.delete();
+}
+
+export async function editQuote(number: string, quoteContent: string, guildID: string, client: Discord.Client, member: Discord.GuildMember, message?: Discord.Message) {
+
+
     var settings = JSON.parse(readFileSync("./src/settings.json").toString())
 
     var allQuotes = JSON.parse(readFileSync("./src/quotes.json").toString())
-    var quotes = allQuotes[message.guild?.id as string] as {
+
+    var quotes = allQuotes[guildID] as {
         text: string;
         author: string;
         reporter: string | undefined;
@@ -22,12 +33,15 @@ export async function edit(message: Discord.Message, client: Discord.Client) {
         message: string
     }[]
 
+
+
     var oldQuote = quotes[parseInt(number) - 1]
 
-    var settings = JSON.parse(readFileSync("./src/settings.json").toString())
-
-    if (oldQuote.reporter != message.member?.id && !message.member?.roles.cache.has(settings[message.guild?.id as string]["quoteMaster"])) {
-        message.channel.send("No permission to edit not self written Quotes!")
+    
+    if (oldQuote.reporter != member.id && !member.roles.cache.has(settings[guildID as string]["quoteMaster"])) {
+        if (message) {
+            message.channel.send("No permission to edit not self written Quotes!")
+        }
         return
     }
 
@@ -41,18 +55,16 @@ export async function edit(message: Discord.Message, client: Discord.Client) {
     })
 
     if (parts.includes("[replace this]") || parts.includes("[replace with tag. If not on Server: none]") || parts.includes("[replace with fitting tags, separated by ',']")) {
-        message.channel.send("Please replace all fields")
         return
     }
     if (parts.length != 4) {
-        message.channel.send("Please use propper formatting")
         return
     }
 
     var quoteObject = {
         text: parts[0],
         author: parts[1],
-        reporter: message.member?.id,
+        reporter: oldQuote.reporter,
         character: parts[2],
         tags: separateTags(parts[3]),
         message: oldQuote.message
@@ -60,17 +72,15 @@ export async function edit(message: Discord.Message, client: Discord.Client) {
 
     quotes[parseInt(number) - 1] = quoteObject
 
-    allQuotes[message.guild?.id as string] = quotes
+    allQuotes[guildID] = quotes
 
     writeFileSync("./src/quotes.json", JSON.stringify(allQuotes))
 
-    let quoteChannel = await client.channels.fetch(settings[message.guild?.id as string].QUOTE_CHANNEL_ID) as Discord.TextChannel
+    let quoteChannel = await client.channels.fetch(settings[guildID].QUOTE_CHANNEL_ID) as Discord.TextChannel
 
     var messageID = quotes[parseInt(number) - 1].message
     var quoteMessage = await quoteChannel.messages.fetch(messageID)
-    quoteMessage.edit(generateQuote(quoteObject, parseInt(number), message.guild?.id as string))
-
-    message.delete();
+    quoteMessage.edit(generateQuote(quoteObject, parseInt(number), guildID))
 }
 
 function separateTags(tags: string) {

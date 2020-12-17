@@ -3,6 +3,7 @@ import { createQuote } from "./quoteListener"
 import { readFileSync } from "fs"
 import * as Discord from "discord.js"
 import { removeQuote } from './commands/remove'
+import { editQuote } from "./commands/edit"
 
 export function listenServer(client: Discord.Client) {
 
@@ -15,7 +16,7 @@ export function listenServer(client: Discord.Client) {
                 response.setHeader('Content-Type', 'text/plain')
                 response.setHeader("Access-Control-Allow-Origin", "*");
                 //response.statusCode = 200
-                response.end(JSON.stringify({servers: Object.keys(settings)}))
+                response.end(JSON.stringify({ servers: Object.keys(settings) }))
                 break;
             }
             case '/': {
@@ -69,6 +70,27 @@ export function listenServer(client: Discord.Client) {
             }
             case '/edit': {
                 console.log("edit")
+
+                var body = ''
+                request.on('data', function (data) {
+                    body += data
+                })
+                request.on('end', function () {
+                    body = decodeURIComponent(body)
+                    body = body.split("%20").join(" ")
+                    var bodyJSON = getBodyJSON(body)
+                    response.writeHead(200, { 'Content-Type': 'text/plain' })
+                    response.end('post received')
+
+                    
+                    var member = client.guilds.cache.get(bodyJSON['server'])?.members.cache.get(bodyJSON['user'])
+
+                    editQuote(bodyJSON["number"], bodyJSON["quote"].toString(), bodyJSON["server"], client, member as Discord.GuildMember)
+
+
+                })
+
+                response.end("received")
                 return
             }
         }
@@ -76,7 +98,7 @@ export function listenServer(client: Discord.Client) {
     })
 
     const port = 3000
-    const host = /*'localhost'*/'192.168.178.52'
+    const host = 'localhost'//'192.168.178.52'
     server.listen(port, host)
     console.log(`Listening at http://${host}:${port}`)
 
