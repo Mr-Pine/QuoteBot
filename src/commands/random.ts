@@ -42,6 +42,9 @@ async function sendRandom(message: Discord.Message, client: Discord.Client, args
     if (!isNaN(parseInt(args[0]))) {
         randomIndex = parseInt(args[0]) - 1
     }
+    if(args.includes("latest")){
+        randomIndex = quotes.length - 1
+    }
 
     var quote = quotes[randomIndex]
 
