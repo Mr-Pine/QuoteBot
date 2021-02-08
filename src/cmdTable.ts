@@ -1,4 +1,4 @@
-import {getRandom} from "./commands/random"
+import {handleSlash, slashGetQuote} from "./commands/random"
 import { newQuote } from "./commands/new"
 import { list } from "./commands/list"
 import { stats } from "./commands/stats"
@@ -18,7 +18,8 @@ export const commands = [
         permission: [
             "everyone"
         ],
-        function: getRandom
+        function: handleSlash,
+        commandObject: slashGetQuote
     },
     {
         invokers: [

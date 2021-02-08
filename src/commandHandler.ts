@@ -1,4 +1,4 @@
-import * as Discord from "discord.js";
+/* import * as Discord from "discord.js";
 import * as config from "./config.json"
 import { commands as cmdTable } from "./cmdTable"
 import {getHelp} from "./getHelp"
@@ -50,4 +50,4 @@ function getPermission(message: Discord.Message, permissions: string[]) {
             return false
         }
     }
-}
+} */

@@ -1,10 +1,11 @@
 import * as Discord from "discord.js"
 import * as config from "./config.json"
-import { handle } from "./commandHandler"
+//import { handle } from "./commandHandler"
 import { sendEmbed } from "./sendEmbed"
 import { setStatus } from "./status"
 import { listenQuotes } from "./quoteListener"
 import { listenServer } from "./serverQuoteListener"
+import { registerSlash } from "./slash_commands"
 
 console.log("Hello World");
 
@@ -15,13 +16,14 @@ client.on("ready", () => {
     console.log("Allzeit bereit für deepe Quotes");
     client.user?.setActivity("Hallo! Bin wieder da", { type: "STREAMING" })
     listenServer(client)
+    registerSlash(client)
 })
 
 client.on("message", message => {
     var text = message.content;
     var author = message.author.username;
     console.log(`${author}: ${text}`);
-    handleMessage(message)
+    //handleMessage(message)
     if (message.author.id != client.user?.id) {
         listenQuotes(message)
     }
@@ -35,7 +37,7 @@ function handleMessage(message: Discord.Message) {
     if (message.author.id != client.user?.id) {
         if (message.content.startsWith(config.PREFIX)) {
             var invoker = message.content.substr(2).split(' ')[0]
-            handle(message, invoker, client);
+            //handle(message, invoker, client);
         }
     }
 }
