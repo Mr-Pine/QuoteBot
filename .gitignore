@@ -1,4 +1,4 @@
 node_modules/
 text.mp3
 src/config.json
-src/package-lock.json
+package-lock.json
