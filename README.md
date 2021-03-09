@@ -1,3 +1,3 @@
 # QuoteBot
 
-A Discord Bot for very Deep Quotes
+A discord bot for very deep quotes
