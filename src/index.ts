@@ -43,7 +43,7 @@ function handleMessage(message: Discord.Message) {
 process.on('uncaughtException', function (err) {
     console.error(err);
     client.channels.fetch("704275816598732840").then(botWiese => {
-        sendEmbed("Error occured", [255, 0, 0], botWiese as Discord.TextChannel)
+        sendEmbed("Java.lang.NullPointerException at 34:40", [255, 0, 0], botWiese as Discord.TextChannel)
     })
 });
 
