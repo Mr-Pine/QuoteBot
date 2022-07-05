@@ -10,7 +10,7 @@
   "author": "David Kiefer",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/opus": "^0.3.3",
+    "@discordjs/opus": "^0.8.0",
     "@types/node": "^14.14.2",
     "discord.js": "^12.4.1",
     "ffmpeg-static": "^4.2.7",
